@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +22,7 @@ import com.Restaurant_Service.dto.MenuItemDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/restaurant")
+@RequestMapping("api/restaurant") 
 public class MenuItemController {
     
     @Autowired
@@ -30,12 +32,24 @@ public class MenuItemController {
     public ResponseEntity<List<MenuItemDTO>> getAllMenuItems() {
         List<MenuItemDTO> result = service.getAllMenu();
         return new ResponseEntity<>(result,HttpStatus.OK);
-    }
+    } 
 
     @PostMapping("/addMenu")
     public ResponseEntity<MenuItemDTO> addMenu(@Valid @RequestBody MenuItemDTO dto) {
         System.out.println("============[controller]==================[ "+dto.getRestaurantId()+" ]");
         MenuItemDTO item = service.addNewMenuItem(dto);
         return new ResponseEntity<>(item,HttpStatus.CREATED);
+    }
+
+    @PutMapping("/menuitem/{id}")
+    public ResponseEntity<MenuItemDTO> updateMenuList(@Valid @RequestBody MenuItemDTO dto, @PathVariable int id) {
+        MenuItemDTO item = service.updateMenuItem(dto,id);
+        return new ResponseEntity<>(item,HttpStatus.OK);
+    }
+
+    @DeleteMapping("menuitem/{id}")
+    public ResponseEntity<String> deleteMenuItem(@PathVariable int id) {
+        String message = service.deleteMenuItem(id);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 }

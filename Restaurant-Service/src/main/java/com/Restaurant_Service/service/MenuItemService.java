@@ -56,4 +56,27 @@ public class MenuItemService {
         MenuItems result = repo.save(changeToEntity(dto));
         return changeToDTO(result);
     }
+
+    public MenuItemDTO updateMenuItem(MenuItemDTO dto, int id) {
+        MenuItems item = repo.findById(id).orElse(null);
+        if (item != null) {
+            item.setName(dto.getName());
+            item.setPrice(dto.getPrice());
+            item.setAvailablity(dto.getAvailablity());
+            MenuItems result = repo.save(item);
+            return changeToDTO(result);
+        } else {
+            throw new RuntimeException("Menu item with ID " + id + " not found");
+        }
+    }
+
+    public String deleteMenuItem(int id){
+        if(repo.existsById(id)){
+            repo.deleteById(id);
+            return "Data is Deleted Successfully";
+        }
+        else{
+            return "Data is Not Found";
+        }
+    }
 }
