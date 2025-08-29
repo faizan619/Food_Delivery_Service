@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  service-registry:
+    build:
+      context: ./Service-Registry
+    container_name: service-registry
+    ports:
+      - 8761:8761
+
+  mysql:
+    image: mysql:8
+    restart: always
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: practise_food_restaurants
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  restaurant-service:
+    build:
+      context: ./Restaurant-Service
+    container_name: restaurant-service
+    ports:
+      - 6001:6001
+    depends_on:
+      mysql:
+        condition: service_healthy
+      service-registry:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/practise_food_restaurants
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: mysecretpassword
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka
