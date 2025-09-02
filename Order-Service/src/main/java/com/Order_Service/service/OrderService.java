@@ -50,4 +50,19 @@ public class OrderService {
         }
         return null;
     }
+
+    public OrderDTO addOrder(OrderDTO dto) {
+        Orders order = repo.save(convertToEntity(dto));
+        return convertToDTO(order);
+    }
+
+    public String removeOrder(int id) {
+        if(repo.existsById(id)){
+            repo.deleteById(id);
+            return "Order is Successfully Removed";
+        }
+        else{
+            return null;
+        }
+    }
 }
