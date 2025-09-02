@@ -37,7 +37,7 @@ public class Orders {
     private double price;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.PENDING;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
