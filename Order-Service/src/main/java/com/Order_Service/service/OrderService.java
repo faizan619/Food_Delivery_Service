@@ -19,7 +19,7 @@ public class OrderService {
     private OrderDTO convertToDTO(Orders entity) {
         OrderDTO dto = new OrderDTO();
         dto.setId(entity.getId());
-        dto.setPrice(entity.getPrice());
+        dto.setPrice(entity.getTotal_price());
         dto.setStatus(entity.getStatus() != null ? entity.getStatus() : OrderStatus.PENDING);   
 
         return dto;
@@ -28,7 +28,7 @@ public class OrderService {
     public Orders convertToEntity(OrderDTO dto) {
         Orders entity = new Orders();
         entity.setId(dto.getId());
-        entity.setPrice(dto.getPrice());
+        entity.setTotal_price(dto.getPrice());
         entity.setStatus(dto.getStatus());
 
         return entity;
@@ -60,7 +60,7 @@ public class OrderService {
         if(repo.existsById(id)){
             Orders order = repo.findById(id).get();
             order.setId(dto.getId());
-            order.setPrice(dto.getPrice());
+            order.setTotal_price(dto.getPrice());
             order.setStatus(dto.getStatus());
             Orders data = repo.save(order);
             return convertToDTO(data);

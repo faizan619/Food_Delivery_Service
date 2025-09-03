@@ -33,8 +33,12 @@ public class Orders {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
+    private int customer_id;
+
+    private int restaurant_id;
+
     @Column(nullable=false)
-    private double price;
+    private double total_price;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.PENDING;
