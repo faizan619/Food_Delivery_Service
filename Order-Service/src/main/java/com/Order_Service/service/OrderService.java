@@ -56,6 +56,21 @@ public class OrderService {
         return convertToDTO(order);
     }
 
+    public OrderDTO updateOrder(OrderDTO dto, int id) {
+        if(repo.existsById(id)){
+            Orders order = repo.findById(id).get();
+            order.setId(dto.getId());
+            order.setPrice(dto.getPrice());
+            order.setStatus(dto.getStatus());
+            Orders data = repo.save(order);
+            return convertToDTO(data);
+        }
+        else{
+            return null;
+        }
+
+    }
+
     public String removeOrder(int id) {
         if(repo.existsById(id)){
             repo.deleteById(id);

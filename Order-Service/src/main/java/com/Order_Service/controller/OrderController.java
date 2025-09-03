@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Order_Service.config.OrderStatus;
 import com.Order_Service.dto.OrderDTO;
 import com.Order_Service.service.OrderService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -48,9 +51,21 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> addNewOrder(@RequestBody OrderDTO dto) {
+    public ResponseEntity<OrderDTO> addNewOrder(@Valid @RequestBody OrderDTO dto) {
         OrderDTO order = service.addOrder(dto);
         return new ResponseEntity<>(order,HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateExistingOrder(@Valid @RequestBody OrderDTO dto, @PathVariable int id) {
+        OrderDTO uorder = service.updateOrder(dto,id);
+        if(uorder != null){
+            return new ResponseEntity<>(uorder,HttpStatus.OK);
+        }
+        else{
+            String message = "Unable to Update the Order! Cannot Find the Order in Database";
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{id}")
